@@ -1,0 +1,85 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pkl
+*.log
+*.db
+*.sqlite3
+*.sqlite
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# ---- FastAPI ----
+# Local dev files
+*.local
+*.pid
+*.log
+*.bak
+
+# ---- Environment variables ----
+.env.*
+.env
+
+# ---- Pytest / Coverage ----
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# ---- Jupyter / IPython ----
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
+
+# ---- VSCode / IDEs ----
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ---- Node / Frontend ----
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+pnpm-lock.yaml
+.DS_Store
+
+# ---- Build / Output ----
+build/
+tmp/
+temp/
+.cache/
+__build__/
+coverage/
+*.egg-info/
+*.egg
+.eggs/
+pip-wheel-metadata/
+
+# ---- OS Files ----
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# ---- Docker ----
+/docker-compose.override.yml
+*.dockerfile
+*.tar
+*.img
+*.pid

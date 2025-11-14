@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>RAGForge Dashboard</h1>
+        <p>Monitor your documents, embeddings, and indexing optimization.</p>
+      </header>
+
+      <main>
+        <!-- 🔹 Upload Section -->
+        <section class="card">
+          <h2>📤 Upload Document</h2>
+          <form id="uploadForm">
+            <input type="file" id="fileInput" accept=".pdf,.txt" required />
+            <button type="submit">Upload</button>
+          </form>
+
+          <div id="uploadStatus" class="status"></div>
+        </section>
+
+        <!-- 🔹 Recent Documents -->
+        <section class="card">
+          <h2>📁 Documents Indexed</h2>
+          <ul id="documentList"></ul>
+        </section>
+      </main>
+
+      <footer>
+        <p>Built with ❤️ using FastAPI + LangChain</p>
+      </footer>
+    </div>
+
+    <script>
+      const uploadForm = document.getElementById("uploadForm");
+      const uploadStatus = document.getElementById("uploadStatus");
+      const documentList = document.getElementById("documentList");
+
+      uploadForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const fileInput = document.getElementById("fileInput");
+        const file = fileInput.files[0];
+        if (!file) {
+          uploadStatus.textContent = "Please select a file.";
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        uploadStatus.textContent = "Uploading...";
+        uploadStatus.classList.add("loading");
+
+        try {
+          const response = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            uploadStatus.textContent = `✅ File uploaded successfully (${data.chunks} chunks)`;
+            uploadStatus.classList.remove("loading");
+            uploadStatus.classList.add("success");
+
+            // Add document to list
+            const li = document.createElement("li");
+            li.textContent = `${data.filename} — ${data.collection}`;
+            documentList.prepend(li);
+          } else {
+            uploadStatus.textContent = "❌ Error uploading file.";
+            uploadStatus.classList.add("error");
+          }
+        } catch (error) {
+          console.error("Upload failed:", error);
+          uploadStatus.textContent = "⚠️ Connection error — check backend.";
+          uploadStatus.classList.add("error");
+        }
+      });
+    </script>
+  </body>
+</html>

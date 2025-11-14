@@ -1,0 +1,130 @@
+body {
+  font-family: "Inter", "Segoe UI", sans-serif;
+  background-color: #f9fafb;
+  color: #1e293b;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+header h1 {
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+header p {
+  color: #475569;
+  margin-top: 0.25rem;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #0ea5e9;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+}
+
+.card h2 {
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+footer {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin-top: 2rem;
+}
+
+footer a {
+  color: #0284c7;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+form {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+input[type="file"] {
+  border: 1px solid #cbd5e1;
+  padding: 6px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background-color: #f8fafc;
+}
+
+button {
+  background-color: #0284c7;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background-color: #0369a1;
+}
+
+.status {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.status.success {
+  color: #16a34a;
+}
+
+.status.error {
+  color: #dc2626;
+}
+
+.status.loading {
+  color: #2563eb;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 0.5rem;
+}
+
+ul li {
+  background-color: #f1f5f9;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  border-left: 4px solid #0ea5e9;
+}

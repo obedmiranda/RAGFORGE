@@ -64,16 +64,16 @@
           });
 
           const data = await response.json();
-
+           console.log("DATA " + data)
           if (response.ok) {
-            uploadStatus.textContent = `✅ File uploaded successfully (${data.chunks} chunks)`;
-            uploadStatus.classList.remove("loading");
-            uploadStatus.classList.add("success");
+              uploadStatus.textContent = `✅ Loaded ${data.filename} (${data.pages_detected} pages)`;
+              uploadStatus.classList.remove("loading");
+              uploadStatus.classList.add("success");
 
-            // Add document to list
-            const li = document.createElement("li");
-            li.textContent = `${data.filename} — ${data.collection}`;
-            documentList.prepend(li);
+              // Add document to list
+              const li = document.createElement("li");
+              li.textContent = `${data.filename} — ${data.collection}`;
+              documentList.prepend(li);
           } else {
             uploadStatus.textContent = "❌ Error uploading file.";
             uploadStatus.classList.add("error");

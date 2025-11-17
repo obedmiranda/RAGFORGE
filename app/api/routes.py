@@ -1,9 +1,8 @@
 from fastapi import APIRouter, UploadFile, File
-
+from controllers.pdf_controller import process_pdf_upload
 
 router = APIRouter(prefix='/api', tags=["PDF"])
 
 @router.post("/upload")
 async def upload_pdf(file: UploadFile = File(...)):
-    print(f"📁 Received file: {file.filename}")  # Debug log
-    return {"message": f"Hello 👋 {file.filename} uploaded successfully!"}
+        return await process_pdf_upload(file)

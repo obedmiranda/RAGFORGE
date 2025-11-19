@@ -1,1 +1,9 @@
 fastapi[standard]
+uvicorn[standard]
+python-dotenv
+langchain
+langchain-postgres
+langchain-openai
+psycopg[binary]
+pydantic
+jinja2

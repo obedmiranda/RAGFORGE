@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 import os
 from langchain_openai import OpenAIEmbeddings
 from langchain_core.documents import Document
-from langchain_community.vectorstores.pgvector import PGVector
+from langchain_postgres.vectorstores import PGVector
 
 load_dotenv()
 
@@ -21,7 +21,8 @@ async def store_embeddings(chunks: list[Document], session_id: str, document_id:
         documents=chunks,
         embedding=embedding_model,
         connection_string=CONNECTION_STRING,
-        collection_name=f"pdf_embeddings_{session_id}",
+        collection_name= "ragforge_embeddings"
+          # collection_name=f"pdf_embeddings_{session_id}",
     )
 
     return {

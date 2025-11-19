@@ -74,6 +74,12 @@
               const li = document.createElement("li");
               li.textContent = `${data.filename} — ${data.collection}`;
               documentList.prepend(li);
+                 // 🔥 Redirect automatically to Query Engine
+              setTimeout(() => {
+                  window.location.href = "/query";
+              }, 1200); // pequeño delay para que vea el éxito
+
+              
           } else {
             uploadStatus.textContent = "❌ Error uploading file.";
             uploadStatus.classList.add("error");

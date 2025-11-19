@@ -14,3 +14,10 @@ app.include_router(routes.router)
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "title": "RAGForge Dashboard"})
+
+@app.get("/query", response_class=HTMLResponse)
+async def query_page(request: Request):
+    return templates.TemplateResponse(
+        "query.html",
+        {"request": request, "title": "Query Engine"}
+    )

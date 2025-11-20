@@ -36,18 +36,6 @@ Jinja2 Templates for the dashboard
 
 Vanilla JS / HTML / CSS for the frontend
 
-
-app/
- ├── api/                 # Routes (upload, query, utilities)
- ├── controllers/         # HTTP controllers
- ├── services/            # Embeddings, retrieval, storage logic
- ├── chains/              # RAG pipelines (rag_chain.py, rewrite_chain.py, etc)
- ├── templates/           # Frontend (index, query)
- ├── static/              # CSS, JS, assets
- ├── main.py              # FastAPI app entrypoint
- └── README.md
-
-
 🔧 Current Capabilities
 
 Document upload and chunking

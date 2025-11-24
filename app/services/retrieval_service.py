@@ -22,7 +22,7 @@ def retrieve_relevant_chunks(query: str, collection_name: str):
     )
 
     relevant_docs = retriever.get_relevant_documents(query)
-    print("\n🔍 RETRIEVAL RESULTS")
+    print("\n RETRIEVAL RESULTS")
     print(f"Query: {query}")
     print(f"Collection: {collection_name}")
     print(f"Chunks Retrieved: {len(relevant_docs)}")

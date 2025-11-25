@@ -10,17 +10,28 @@
       body {
         background: #f5f7fa;
         font-family: system-ui, -apple-system, sans-serif;
+        margin: 0;
+        padding: 0;
       }
 
+      /* Grid Layout */
+      .layout {
+        display: flex;
+        gap: 22px;
+        padding: 25px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      /* --------------------- LEFT CHAT PANEL --------------------- */
       .chat-container {
-        max-width: 760px;
-        margin: 40px auto;
+        flex: 2;
         background: white;
-        border-radius: 14px;
+        border-radius: 12px;
         padding: 20px;
         display: flex;
         flex-direction: column;
-        height: 80vh;
+        height: 85vh;
         box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
       }
 
@@ -28,10 +39,6 @@
         text-align: center;
         padding-bottom: 10px;
         border-bottom: 1px solid #ddd;
-      }
-
-      .chat-header h1 {
-        margin: 0;
       }
 
       .chat-window {
@@ -75,7 +82,6 @@
         }
       }
 
-      /* Input area */
       .input-area {
         display: flex;
         gap: 8px;
@@ -100,58 +106,100 @@
         border-radius: 12px;
         cursor: pointer;
         font-size: 1rem;
-        transition: 0.2s;
       }
 
-      #queryButton:hover {
-        background: #357abd;
-      }
-
-      .back {
-        text-align: center;
-        margin-bottom: 15px;
-      }
-
-      .back a {
-        color: #333;
-        text-decoration: none;
-      }
-
-      .chunks {
-        background: #fafafa;
+      /* --------------------- RIGHT PIPELINE PANEL --------------------- */
+      .pipeline-container {
+        flex: 1;
+        background: white;
         border-radius: 12px;
-        padding: 12px;
+        padding: 22px;
+        height: 85vh;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+      }
+
+      .pipeline-section {
+        background: #f7f9fc;
+        padding: 16px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+      }
+
+      .pipeline-section h3 {
+        margin-top: 0;
+        margin-bottom: 8px;
+        font-size: 1.1rem;
+        color: #333;
+      }
+
+      .mini-log {
         font-size: 0.9rem;
-        margin-top: 4px;
-        color: #666;
+        color: #555;
+        white-space: pre-wrap;
+      }
+
+      .chunk-box {
+        background: white;
+        border-radius: 10px;
+        padding: 10px;
+        margin-top: 10px;
+        border: 1px solid #ddd;
       }
     </style>
   </head>
 
   <body>
-    <div class="chat-container">
-      <div class="back">
-        <a href="/">⬅ Back to Dashboard</a>
+    <div class="layout">
+
+      <!-- LEFT PANEL -->
+      <div class="chat-container">
+        <div class="back">
+          <a href="/">⬅ Back to Dashboard</a>
+        </div>
+
+        <div class="chat-header">
+          <h1>🤖 Query Engine</h1>
+          <p>Ask questions across your indexed documents.</p>
+        </div>
+
+        <div id="chatWindow" class="chat-window"></div>
+
+        <div class="input-area">
+          <input type="text" id="queryInput" placeholder="Ask something..." />
+          <button id="queryButton">Ask</button>
+        </div>
       </div>
 
-      <div class="chat-header">
-        <h1>🤖 Query Engine</h1>
-        <p style="margin-top:6px;color:#555">
-          Ask questions across your indexed documents.
-        </p>
-      </div>
+      <!-- RIGHT PANEL -->
+      <div class="pipeline-container">
 
-      <div id="chatWindow" class="chat-window"></div>
+        <h2>🧠 RAG Pipeline</h2>
 
-      <!-- Input area -->
-      <div class="input-area">
-        <input
-          type="text"
-          id="queryInput"
-          placeholder="Ask something..."
-        />
+        <!-- REWRITE OUTPUT -->
+        <div class="pipeline-section">
+          <h3>✏️ Rewritten Query</h3>
+          <div id="rewriteBox" class="mini-log">—</div>
+        </div>
 
-        <button id="queryButton">Ask</button>
+        <!-- RETRIEVED CHUNKS -->
+        <div class="pipeline-section">
+          <h3>📚 Retrieved Chunks</h3>
+          <div id="chunksBox" class="mini-log">—</div>
+        </div>
+
+        <!-- PIPELINE STEPS -->
+        <div class="pipeline-section">
+          <h3>⚙️ Pipeline Steps</h3>
+          <div id="stepsBox" class="mini-log">
+            Rewrite…  
+            Retrieve…  
+            Read…
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -160,12 +208,15 @@
       const queryInput = document.getElementById("queryInput");
       const queryButton = document.getElementById("queryButton");
 
+      const rewriteBox = document.getElementById("rewriteBox");
+      const chunksBox = document.getElementById("chunksBox");
+      const stepsBox = document.getElementById("stepsBox");
+
       function addMessage(text, sender) {
         const msg = document.createElement("div");
         msg.className = `message ${sender}`;
         msg.textContent = text;
         chatWindow.appendChild(msg);
-
         chatWindow.scrollTop = chatWindow.scrollHeight;
       }
 
@@ -175,13 +226,14 @@
 
         addMessage(question, "user");
         queryInput.value = "";
-
         addMessage("Thinking...", "bot");
 
+        // Reset right panel
+        rewriteBox.textContent = "Processing…";
+        chunksBox.textContent = "Processing…";
+        stepsBox.textContent = "Rewrite…\nRetrieve…\nRead…";
+
         try {
-            
-          //send message to the retrieval backend  
-          console.log("SENDING MESSAGE TO RETRIEVAL WITH QUESTION FROM CHAT: " + question)
           const res = await fetch("/api/query", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -190,24 +242,37 @@
 
           const data = await res.json();
 
+          // Replace "Thinking..." message
           const lastMsg = chatWindow.querySelector(".message.bot:last-child");
           lastMsg.textContent = data.answer || "Error processing request.";
 
-          if (data.chunks && data.chunks.length > 0) {
-            const chunkBox = document.createElement("div");
-            chunkBox.className = "chunks bot";
-            chunkBox.innerHTML =
-              "<strong>Relevant Chunks:</strong><br>" +
-              data.chunks.map((c) => `• ${c}`).join("<br>");
-            chatWindow.appendChild(chunkBox);
+          // Right Panel Content
+          rewriteBox.textContent = data.rewritten_query || "—";
+
+          if (data.sources && data.sources.length > 0) {
+            chunksBox.innerHTML = data.sources
+              .map((c, i) => `<div class="chunk-box">
+                <strong>Chunk ${i + 1}</strong><br>
+                ${c.content.slice(0, 200)}...
+              </div>`)
+              .join("");
+          } else {
+            chunksBox.textContent = "—";
           }
 
-          chatWindow.scrollTop = chatWindow.scrollHeight;
+          stepsBox.textContent =
+            "Rewrite ✓\nRetrieve ✓\nRead ✓";
+
         } catch (err) {
           const lastMsg = chatWindow.querySelector(".message.bot:last-child");
           lastMsg.textContent = "Error contacting backend.";
+
+          rewriteBox.textContent = "Error.";
+          chunksBox.textContent = "Error.";
+          stepsBox.textContent = "Error.";
         }
       });
+
       queryInput.addEventListener("keypress", (e) => {
         if (e.key === "Enter") queryButton.click();
       });

@@ -27,14 +27,28 @@ def build_qa_chain(collection_name: str):
     vectorstore = get_vectorstore(collection_name)
     retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 3})
 
-    prompt_template = """
-    You are a helpful assistant answering questions about documents.
-    Use ONLY the provided context.
-    If the answer is not in the context, say you don't have enought context to answer that, ask the user to valid its question, be kind.
+    prompt_template = """You are an AI assistant that answers questions using ONLY the information provided in the retrieved context. 
+    Do NOT use outside knowledge.
 
-    Context:{context}
-    Question: {question}
+    Your goal is to:
+    - Interpret the user question even if it is vague, short, or poorly written.
+    - Match it with the closest relevant information in the context.
+    - If the user question is broad (e.g., “cv”, “renewable”, “tools”), try to infer what the user likely meant based on the context themes.
+    - Provide concise, accurate answers grounded in the text.
+
+    If the context does not contain enough information to answer, say:
+    “I don’t have enough information in the indexed documents to answer that. Could you rephrase or be more specific?”
+
+    Make your answer helpful, kind, and easy to read.
+
+    Context:
+    {context}
+
+    Question:
+    {question}
+
     Answer:
+
     """
 
     prompt = PromptTemplate(

@@ -16,17 +16,15 @@ async def store_embeddings(chunks: list[Document], session_id: str, document_id:
         doc.metadata["document_id"] = document_id
         doc.metadata["source"] = doc.metadata.get("source", "pdf")
 
-    # Guardar en PGVector
     PGVector.from_documents(
         documents=chunks,
         embedding=embedding_model,
-        connection_string=CONNECTION_STRING,
-        collection_name= "ragforge_embeddings"
-          # collection_name=f"pdf_embeddings_{session_id}",
+        connection=CONNECTION_STRING,
+        collection_name="ragforge_embeddings"
     )
 
     return {
         "message": "Embeddings stored successfully",
         "chunks_indexed": len(chunks),
-        "collection": f"pdf_embeddings_{session_id}"
+        "collection": "ragforge_embeddings" 
     }

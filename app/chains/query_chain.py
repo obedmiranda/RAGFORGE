@@ -27,29 +27,36 @@ def build_qa_chain(collection_name: str):
     vectorstore = get_vectorstore(collection_name)
     retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 3})
 
-    prompt_template = """You are an AI assistant that answers questions using ONLY the information provided in the retrieved context. 
-    Do NOT use outside knowledge.
+    prompt_template = """
+    You are an AI assistant that answers questions and generates content using ONLY the information 
+    provided in the retrieved document context. 
 
-    Your goal is to:
-    - Interpret the user question even if it is vague, short, or poorly written.
-    - Match it with the closest relevant information in the context.
-    - If the user question is broad (e.g., “cv”, “renewable”, “tools”), try to infer what the user likely meant based on the context themes.
-    - Provide concise, accurate answers grounded in the text.
+    You may:
+    - Answer factual questions.
+    - Synthesize new content (cover letters, summaries, rewrites, paragraphs, drafts).
+    - Combine ideas across the context.
+    - Rephrase, elaborate, or restructure information.
+    - Generate text in any style requested.
 
-    If the context does not contain enough information to answer, say:
-    “I don’t have enough information in the indexed documents to answer that. Could you rephrase or be more specific?”
+    Rules:
+    1. You MUST stay grounded in the provided context.
+    2. You MUST NOT introduce facts that are not supported by the context.
+    3. If the user requests something creative (e.g., a cover letter), generate it using only information found inside the context.
+    4. If the context does not contain enough information, politely explain what is missing.
+    5. Maintain a helpful, professional tone.
 
-    Make your answer helpful, kind, and easy to read.
-
-    Context:
+    --------------------
+    CONTEXT:
     {context}
 
-    Question:
+    --------------------
+    QUESTION:
     {question}
 
-    Answer:
-
+    --------------------
+    ANSWER:
     """
+
 
     prompt = PromptTemplate(
         template=prompt_template,

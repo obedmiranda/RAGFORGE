@@ -184,6 +184,12 @@
           <div id="rewriteBox" class="mini-log">—</div>
         </div>
 
+        <!-- MULTIQUERY OUTPUT (NEW) -->
+        <div class="pipeline-section">
+          <h3>🔀 Generated Queries (MultiQuery)</h3>
+          <div id="multiQueryBox" class="mini-log">—</div>
+        </div>
+
         <!-- RETRIEVED CHUNKS -->
         <div class="pipeline-section">
           <h3>📚 Retrieved Chunks</h3>
@@ -209,6 +215,7 @@
       const queryButton = document.getElementById("queryButton");
 
       const rewriteBox = document.getElementById("rewriteBox");
+      const multiQueryBox = document.getElementById("multiQueryBox");  // NEW
       const chunksBox = document.getElementById("chunksBox");
       const stepsBox = document.getElementById("stepsBox");
 
@@ -230,6 +237,7 @@
 
         // Reset right panel
         rewriteBox.textContent = "Processing…";
+        multiQueryBox.textContent = "Processing…";   // NEW
         chunksBox.textContent = "Processing…";
         stepsBox.textContent = "Rewrite…\nRetrieve…\nRead…";
 
@@ -242,12 +250,19 @@
 
           const data = await res.json();
 
-          // Replace "Thinking..." message
           const lastMsg = chatWindow.querySelector(".message.bot:last-child");
           lastMsg.textContent = data.answer || "Error processing request.";
 
-          // Right Panel Content
           rewriteBox.textContent = data.rewritten_query || "—";
+
+          // MULTIQUERY DISPLAY (NEW)
+          if (data.generated_queries && data.generated_queries.length > 0) {
+            multiQueryBox.innerHTML = data.generated_queries
+              .map((q) => `• ${q}`)
+              .join("<br>");
+          } else {
+            multiQueryBox.textContent = "—";
+          }
 
           if (data.sources && data.sources.length > 0) {
             chunksBox.innerHTML = data.sources
@@ -268,6 +283,7 @@
           lastMsg.textContent = "Error contacting backend.";
 
           rewriteBox.textContent = "Error.";
+          multiQueryBox.textContent = "Error.";   // NEW
           chunksBox.textContent = "Error.";
           stepsBox.textContent = "Error.";
         }

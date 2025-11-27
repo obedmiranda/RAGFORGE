@@ -1,51 +1,128 @@
-Advanced Indexing Optimization Platform for LangChain-based RAG Systems
+Aquí tienes un **README actualizado**, **mucho más profesional**, **compacto**, **claro**, y reflejando las nuevas capacidades: *query rewriting* y *multi-query retrieval*.
+Lo adapté sin cambiar tu estilo, pero mejorándolo y haciéndolo digno de GitHub.
 
-RAGForge is a modular, extensible framework designed to build enterprise-grade Retrieval-Augmented Generation (RAG) pipelines.
-It provides:
+---
 
-⚡ Indexing Optimization Engine
-Full vs incremental change detection, selective re-embedding, and chunk-level diffing.
+# 🚀 **RAGForge — Advanced Indexing & Retrieval Optimization Platform**
 
-🔍 Retrieval Optimization
-Multi-query retrieval, rank fusion, query rewriting, and embedding-based search powered by PGVector.
+*A modular, extensible framework for building enterprise-grade Retrieval-Augmented Generation (RAG) systems using LangChain.*
 
-🧱 Chain Composition Layer
-Modular chains for retrieval, generation, ranking, and orchestration.
+RAGForge provides a complete pipeline for indexing, retrieval, optimization, and synthesis—ideal for research, prototyping, and production-grade AI assistants.
 
-🖥️ Integrated FastAPI Dashboard
-Upload documents, inspect chunks, visualize embeddings, test queries, and monitor RAG performance.
+---
 
-🗄️ PGVector Storage
-Efficient vector storage with metadata tracking for document versions and incremental updates.
+# ⚡ Core Features
 
-RAGForge serves as a foundation for building advanced RAG systems, research experiments, or production-ready knowledge assistants.
+## 🔧 **1. Indexing Optimization Engine**
 
-🚀 Technology Stack
+* Full vs incremental document processing
+* Change-detection for selective re-embedding
+* Chunk-level inspection and diffing
+* Metadata tracking (versions, sources, doc lineage)
 
-FastAPI for backend + UI
+---
 
-LangChain for retrieval, chains, and orchestration
+## 🔍 **2. Retrieval Optimization Layer**
 
-PGVector for vector storage
+RAGForge implements multiple retrieval-boosting strategies:
 
-OpenAI Embeddings for vector generation
+### ✏️ **Rewrite-Retrieve-Read (RRR)**
 
-PostgreSQL for metadata + document tracking
+Semantic query rewriting to:
 
-Jinja2 Templates for the dashboard
+* clarify intent
+* remove ambiguity
+* improve vector search hit-rate
 
-Vanilla JS / HTML / CSS for the frontend
+### 🔁 **Multi-Query Retrieval (NEW)**
 
-🔧 Current Capabilities
+Five alternative queries are generated for every user input to expand retrieval coverage.
+All results are merged and deduped before synthesis.
 
-Document upload and chunking
+### 🧮 **(Planned) RAG-Fusion / Reciprocal Rank Fusion (RRF)**
 
-OpenAI embedding generation
+Rank combination across multiple retrieval lists to re-order documents by global relevance.
 
-Storage in PGVector (persistent)
+### 🔎 Similarity Search
 
-Retrieval via similarity search
+Powered by PGVector + OpenAI embeddings.
 
-Query endpoint + visual UI
+---
 
-Foundation for chain-based RAG pipelines
+## 🧱 **3. Chain Composition Layer**
+
+Built on LangChain:
+
+* Modular chains for rewriting, retrieval, synthesis
+* Custom QA chain for multi-query merged-context answers
+* Easy to extend with RAPTOR, MultiVectorRetriever, rerankers, etc.
+
+---
+
+## 🖥️ **4. Integrated FastAPI Dashboard**
+
+Visual, interactive interface to manage your RAG pipeline:
+
+### 📁 **Document Panel**
+
+* Upload PDFs
+* Inspect chunks
+* Visualize metadata
+
+### 🤖 **Query Engine (Enhanced)**
+
+UI now displays:
+
+* Rewritten query (RRR)
+* Multi-query generated variants
+* Retrieved chunks (merged view)
+* Pipeline stages (Rewrite → Retrieve → Read)
+* Final LLM answer with source attribution
+
+Built using **FastAPI + Jinja2 + Vanilla JS**.
+
+---
+
+## 🗄️ **5. Persistent Vector Storage**
+
+Using **PostgreSQL + PGVector**:
+
+* Embeddings stored with JSONB metadata
+* Efficient lookup across document versions
+* Future-ready for multimodal embeddings
+
+---
+
+# 🏗️ Technology Stack
+
+### Backend
+
+* **FastAPI**
+* **LangChain**
+* **OpenAI Embeddings**
+* **PGVector + PostgreSQL**
+* **Python 3.11+**
+
+### Frontend
+
+* **Jinja2 templates**
+* **HTML + CSS (Vanilla)**
+* **JavaScript (no frameworks)**
+
+---
+
+# ✨ Current Capabilities (Ready Today)
+
+* Document upload & chunking
+* Embedding generation
+* PGVector storage (persistent)
+* Similarity retrieval
+* Query rewriting (RRR)
+* Multi-Query Retrieval
+* Unified QA synthesis from merged context
+* Interactive dashboard
+
+
+
+
+

@@ -73,7 +73,63 @@ def build_qa_chain(collection_name: str):
 
     return chain
 
+def retrieve_docs(query: str, collection_name: str, k: int = 3):
+     try:
+        vectorstore = get_vectorstore(collection_name)
+        retriever = vectorstore.as_retriever(
+            search_type="similarity",
+            search_kwargs={"k": k}
+        )
+        return retriever.get_relevant_documents(query)
+     except Exception as e:
+        print("Error in retrieve_docs:", e)
+        return []
 
+def run_qa_with_docs(question: str, docs: list[Document]):
+    try:
+        llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+
+        prompt_template = """
+        You are an AI assistant that answers questions and generates content 
+        using ONLY the information provided in the retrieved document context.
+
+        --------------------
+        CONTEXT:
+        {context}
+
+        --------------------
+        QUESTION:
+        {question}
+
+        --------------------
+        ANSWER:
+        """
+
+        prompt = PromptTemplate(
+            template=prompt_template,
+            input_variables=["context", "question"]
+        )
+
+        combined_context = "\n\n".join([d.page_content for d in docs])
+
+        formatted = prompt.format(
+            context=combined_context,
+            question=question
+        )
+
+        answer = llm.invoke(formatted)
+
+        return {
+            "answer": answer.content,
+            "sources": [{"content": d.page_content, "metadata": d.metadata} for d in docs]
+        }
+
+    except Exception as e:
+        print("Error in run_qa_with_docs:", e)
+        return {"answer": "Error.", "sources": []}
+
+
+     
 def run_qa_chain(query: str, collection_name: str):
 
     try:

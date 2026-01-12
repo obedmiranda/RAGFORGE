@@ -1,7 +1,9 @@
 # services/rewriter_service.py
 
 from langchain_openai import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate
+# from langchain.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate
+
 from dotenv import load_dotenv
 
 load_dotenv()

@@ -1,8 +1,13 @@
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from langchain.chains import RetrievalQA
+# from langchain.chains import RetrievalQA
 from langchain_postgres.vectorstores import PGVector
-from langchain.prompts import PromptTemplate
-from langchain.schema import Document
+# from langchain.prompts import PromptTemplate
+# from langchain.schema import Document
+
+from langchain_classic.chains import RetrievalQA
+from langchain_core.prompts import PromptTemplate
+from langchain_core.documents import Document
+
 from dotenv import load_dotenv
 import os
 
